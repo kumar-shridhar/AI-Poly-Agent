@@ -4,7 +4,7 @@ from py_clob_client.client import ClobClient
 from py_clob_client.clob_types import ApiCreds
 from dotenv import load_dotenv
 from py_clob_client.constants import AMOY
-from key import key, api_key, secret, passphrase
+from key import key
 
 # Whoosh imports
 from whoosh.fields import Schema, TEXT, ID, KEYWORD
@@ -41,13 +41,9 @@ custom_analyzer = SpacyTokenizer() | StopFilter()
 # -------------------------
 def get_open_markets():
     host = "https://clob.polymarket.com"
-    creds = ApiCreds(
-        api_key=api_key,
-        api_secret=secret,
-        api_passphrase=passphrase,
-    )
+
     chain_id = AMOY
-    client = ClobClient(host, key=key, chain_id=chain_id, creds=creds)
+    client = ClobClient(host, key=key, chain_id=chain_id)
 
     all_markets = []
     next_cur = ""
@@ -91,12 +87,16 @@ def build_index(markets, index_dir="indexdir"):
         question = market.get("question", "")
         # Get description (won't be stored separately).
         description = market.get("description", "")
-        # Combine question and description for the searchable text.
-        combined_text = f"{question} {description}"
-        # Get tags (assumed to be a list); store as a comma-separated string.
+        # Combine question and description for the searchable text
+        
         tags_list = market.get("tags", [])
+        weighted_tags = " ".join(tag for tag in tags_list for _ in range(3))
         tags_str = ",".join(tags_list) if tags_list else ""
-        # Build URL using "market_slug".
+        
+        # Create combined text with extra weight on tags.
+        combined_text = f"{question} {description} {weighted_tags}"
+        
+        
         market_slug = market.get("market_slug", "")
         market_url = f"https://polymarket.com/market/{market_slug}" if market_slug else ""
         
