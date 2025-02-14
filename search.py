@@ -2,6 +2,7 @@ from whoosh.index import open_dir
 from whoosh.qparser import QueryParser
 from whoosh.scoring import BM25F
 from whoosh.query import Or, Term
+from build_index import SpacyTokenizer
 
 def search_markets(query_str, filter_tags=None, index_dir="indexdir"):
     """
@@ -40,6 +41,7 @@ def main():
         print("Market URL:", market["market_url"])
         print("Question:", market["question"])
         print("Tags:", market["tags"])
+        print("Icon:", market["icon"])
         print("-" * 40)
 
 if __name__ == "__main__":

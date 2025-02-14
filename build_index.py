@@ -75,7 +75,8 @@ def build_index(markets, index_dir="indexdir"):
         question=TEXT(stored=True),  # Original question for display.
         text=TEXT(stored=True, analyzer=custom_analyzer),  # Combined and lemmatized (question + description).
         tags=KEYWORD(stored=True, commas=True, lowercase=True),
-        market_url=ID(stored=True)
+        market_url=ID(stored=True),
+        icon=ID(stored=True)
     )
     
     ix = create_in(index_dir, schema)
@@ -98,12 +99,13 @@ def build_index(markets, index_dir="indexdir"):
         
         market_slug = market.get("market_slug", "")
         market_url = f"https://polymarket.com/market/{market_slug}" if market_slug else ""
-        
+        icon = market.get("icon", "")
         writer.add_document(
             question=question,
             text=combined_text,
             tags=tags_str,
-            market_url=market_url
+            market_url=market_url,
+            icon=icon
         )
     writer.commit()
     print("Index built successfully and written to disk.")
