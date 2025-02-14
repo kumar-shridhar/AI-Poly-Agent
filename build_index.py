@@ -4,7 +4,6 @@ from py_clob_client.client import ClobClient
 from py_clob_client.clob_types import ApiCreds
 from dotenv import load_dotenv
 from py_clob_client.constants import AMOY
-from key import key
 
 # Whoosh imports
 from whoosh.fields import Schema, TEXT, ID, KEYWORD
@@ -43,7 +42,7 @@ def get_open_markets():
     host = "https://clob.polymarket.com"
 
     chain_id = AMOY
-    client = ClobClient(host, key=key, chain_id=chain_id)
+    client = ClobClient(host, chain_id=chain_id)
 
     all_markets = []
     next_cur = ""
