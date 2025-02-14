@@ -30,18 +30,14 @@ python app.py
 1. Enter a Polymarket link you want to analyze
 2. Input your Perplexity API key
 3. Click "Analyze Market" to see the results
-4. Review the AI-generated analysis, including:
-   - Market prediction (YES/NO)
-   - Confidence level
-   - Detailed explanation
-   - Supporting sources and citations
+4. 
 
 ## Tech Stack
 
 - Flask (Backend)
 - Bootstrap 5 (UI Framework)
 - Chart.js (Visualizations)
-- Perplexity API (AI Analysis)
+- OpenAI API (Analysis)
 
 ## Note
 

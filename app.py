@@ -4,6 +4,8 @@ import json
 import requests
 from datetime import datetime, timedelta
 import re  # Added to support regex extraction
+from build_index import get_open_markets, build_index, SpacyTokenizer  # Import SpacyTokenizer
+from search import search_markets  # Import the search function
 
 app = Flask(__name__)
 
@@ -71,7 +73,7 @@ def query_perplexity(question, api_key):
     url = "https://api.perplexity.ai/chat/completions"
     
     prompt = """You are an advanced research assistant with access to reliable online sources. For each query you receive, please follow these steps:
-1. **Question:** Analyze the text and form a well-structured question out of it.
+1. **Question:** Analyze the text and form a well-structured question out of it in future tense.
 2. **Search:** Perform a thorough search using credible sources to gather all relevant information regarding the query.
 3. **Answer:** Based on the evidence you collected, determine whether the answer to the query is 'YES' or 'NO'
 4. **Confidence Rating:** Provide a confidence level for your answer on a scale from 0 to 100, where 0 means no confidence and 100 means absolute confidence.
@@ -217,6 +219,48 @@ def analyze():
     except Exception as e:
         print(f"Error in analyze endpoint: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred'}), 500
+
+
+@app.route('/rebuild-index', methods=['POST'])
+def rebuild_index():
+    try:
+        # Check if index directory already exists
+        if os.path.exists("indexdir"):
+            return jsonify({'success': True, 'message': 'Using existing market index'})
+            
+        # If index doesn't exist, build it
+        open_markets = get_open_markets()
+        build_index(open_markets)
+        return jsonify({'success': True, 'message': f'Index rebuilt successfully with {len(open_markets)} markets'})
+    except Exception as e:
+        print(f"Error rebuilding index: {str(e)}")
+        return jsonify({'error': 'Failed to rebuild market index'}), 500
+
+@app.route('/search-markets', methods=['POST'])
+def search():
+    try:
+        data = request.get_json()
+        user_query = data.get('query', '').strip()
+        categories = data.get('categories', [])
+        
+        if not user_query and not categories:
+            return jsonify({'error': 'Please provide a search query or select categories'}), 400
+            
+        # If no query but has categories, use categories as query
+        if not user_query and categories:
+            user_query = ' '.join(categories)
+            
+        # Search markets using the search function
+        matched_markets = search_markets(user_query, filter_tags=categories)
+        
+        return jsonify({
+            'success': True,
+            'markets': matched_markets
+        })
+        
+    except Exception as e:
+        print(f"Error searching markets: {str(e)}")
+        return jsonify({'error': 'Failed to search markets'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

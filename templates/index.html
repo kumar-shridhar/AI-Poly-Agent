@@ -266,6 +266,68 @@
         color: var(--text-secondary);
     }
 
+    .confidence-meter {
+        width: 100%;
+        max-width: 300px;
+        margin: 1rem auto;
+        position: relative;
+    }
+
+    .confidence-bar {
+        height: 8px;
+        background: var(--squid-dark);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, 
+            #FF4B4B 0%,
+            #FFAE33 50%,
+            #4BFF4B 100%
+        );
+        border-radius: 4px;
+        transition: width 1s ease-out;
+        width: 0;
+    }
+
+    .confidence-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+
+    .confidence-value {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .confidence-value.low {
+        background: #FF4B4B;
+        color: var(--text-primary);
+    }
+
+    .confidence-value.medium {
+        background: #FFAE33;
+        color: var(--squid-dark);
+    }
+
+    .confidence-value.high {
+        background: #4BFF4B;
+        color: var(--squid-dark);
+    }
+
     .explanation-card {
         background: var(--squid-gray);
         border-radius: 24px;
@@ -403,6 +465,243 @@
             font-size: 1.5rem;
         }
     }
+
+    .help-button {
+        background: var(--squid-pink);
+        color: var(--text-primary);
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 8px 32px rgba(255, 45, 120, 0.3);
+        cursor: pointer;
+        margin: 2rem auto 0;
+    }
+
+    .help-button:hover {
+        transform: translateY(-2px);
+        background: var(--squid-pink-light);
+    }
+
+    .help-button i {
+        font-size: 1.25rem;
+    }
+
+    .intent-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .intent-card {
+        background: var(--squid-gray);
+        border-radius: 24px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 1200px;
+        border: 1px solid var(--border-color);
+        position: relative;
+    }
+
+    .intent-content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 2.5rem;
+    }
+
+    .category-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .category-button {
+        background: var(--squid-dark);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+    }
+
+    .category-button:hover {
+        border-color: var(--squid-pink);
+        background: rgba(255, 45, 120, 0.1);
+    }
+
+    .category-button.selected {
+        border-color: var(--squid-pink);
+        background: rgba(255, 45, 120, 0.2);
+        box-shadow: 0 0 15px rgba(255, 45, 120, 0.3);
+    }
+
+    .category-button.selected i {
+        color: var(--squid-pink);
+        opacity: 1;
+    }
+
+    .intent-divider {
+        width: 1px;
+        background: var(--border-color);
+        margin: 0 2rem;
+    }
+
+    .free-form-section {
+        flex: 1;
+    }
+
+    .intent-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .intent-close:hover {
+        color: var(--text-primary);
+    }
+
+    .intent-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+
+    .intent-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .intent-textarea {
+        background: var(--squid-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        width: 100%;
+        min-height: 200px;
+        resize: vertical;
+        margin-bottom: 1.5rem;
+        font-family: inherit;
+    }
+
+    .intent-textarea:focus {
+        border-color: var(--squid-pink);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(255, 45, 120, 0.1);
+    }
+
+    .intent-textarea::placeholder {
+        color: var(--text-secondary);
+    }
+
+    /* Add styles for tabs */
+    .nav-tabs {
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-tabs .nav-link {
+        color: var(--text-secondary);
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.75rem 1.5rem;
+        margin-bottom: -1px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--text-primary);
+        border-bottom-color: var(--squid-pink-light);
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--squid-pink);
+        border-bottom-color: var(--squid-pink);
+    }
+
+    .tab-content {
+        padding-top: 1.5rem;
+    }
+
+    .tab-pane {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Style for Ready to Bet button */
+    .btn-ready {
+        background: var(--squid-pink);
+        color: var(--text-primary);
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+        box-shadow: 0 8px 32px rgba(255, 45, 120, 0.3);
+    }
+
+    .btn-ready:hover {
+        transform: translateY(-2px);
+        background: var(--squid-pink-light);
+    }
+
+    /* Update styles for market card layout */
+    .market-card-content {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    /* Update market image styles for side layout */
+    .market-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: var(--squid-dark);
+    }
+
+    .market-image.placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        font-size: 2rem;
+    }
+
+    .market-details {
+        flex: 1;
+    }
 </style>
 {% endblock %}
 
@@ -417,6 +716,10 @@
                 <div class="hero-text">
                     <h1 class="hero-title">AI <span class="highlight">POLY AGENT</span></h1>
                     <p class="hero-subtitle">Empowering Your Polymarket Decisions with AI Insight</p>
+                    <button class="help-button" id="helpButton">
+                        <i class="fas fa-compass"></i>
+                        Not Sure Where to Bet?
+                    </button>
                 </div>
             </div>
         </div>
@@ -470,6 +773,17 @@
                         <div class="market-question" id="market-name">Loading...</div>
                         <h2 class="prediction-text mb-3" id="prediction-text">Loading...</h2>
                         <div class="confidence-text" id="confidence-text"></div>
+                        <div class="confidence-meter">
+                            <div class="confidence-value">0%</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill"></div>
+                            </div>
+                            <div class="confidence-labels">
+                                <span>0%</span>
+                                <span>50%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="explanation-card">
@@ -488,10 +802,230 @@
 <div class="loading-overlay" id="loading-overlay">
     <div class="loading-spinner"></div>
 </div>
+
+<div class="intent-overlay" id="intentOverlay">
+    <div class="intent-card">
+        <button class="intent-close" id="closeIntent">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="intent-title">Tell Us What You're Looking For</h2>
+        <p class="intent-subtitle">Choose a category or describe your interests in detail.</p>
+        
+        <div class="intent-content">
+            <div class="category-buttons">
+                <button class="category-button" data-category="politics">
+                    <i class="fas fa-landmark"></i>
+                    Politics
+                </button>
+                <button class="category-button" data-category="sports">
+                    <i class="fas fa-basketball-ball"></i>
+                    Sports
+                </button>
+                <button class="category-button" data-category="crypto">
+                    <i class="fas fa-chart-line"></i>
+                    Crypto
+                </button>
+                <button class="category-button" data-category="pop-culture">
+                    <i class="fas fa-star"></i>
+                    Pop Culture
+                </button>
+                <button class="category-button" data-category="business">
+                    <i class="fas fa-briefcase"></i>
+                    Business
+                </button>
+            </div>
+
+            <div class="free-form-section">
+                <h3 class="section-title mb-3">Or Describe Your Interests</h3>
+                <textarea class="intent-textarea" id="userIntent" placeholder="Example: I'm interested in tech industry predictions and have good knowledge of AI developments. I'd like to find markets related to major tech company announcements or AI breakthroughs..."></textarea>
+                <button type="button" class="btn btn-primary w-100" id="findMarketsButton">
+                    <i class="fas fa-search me-2"></i>Find Perfect Markets
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+// Replace the selectedCategories Set with a single string
+let selectedCategory = '';
+
+// Modify the category button event listeners
+document.querySelectorAll('.category-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const category = this.dataset.category;
+        
+        // Remove selected class from all buttons
+        document.querySelectorAll('.category-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // If clicking the same category, deselect it
+        if (selectedCategory === category) {
+            selectedCategory = '';
+        } else {
+            // Select the new category
+            selectedCategory = category;
+            this.classList.add('selected');
+        }
+        
+        // Update the textarea with only the category name
+        const userIntent = document.getElementById('userIntent');
+        userIntent.value = selectedCategory;
+    });
+});
+
+// Modify the findMarketsButton click handler
+document.getElementById('findMarketsButton').addEventListener('click', async function() {
+    const userIntent = document.getElementById('userIntent').value;
+    const categories = selectedCategory ? [selectedCategory] : [];
+
+    if (!userIntent.trim() && !selectedCategory) {
+        alert('Please select a category or describe your interests.');
+        return;
+    }
+
+    this.disabled = true;
+    const originalText = this.innerHTML;
+    this.innerHTML = '<div class="spinner"></div><span class="btn-text">Finding Perfect Markets...</span>';
+
+    try {
+        const response = await fetch('/search-markets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: userIntent,
+                categories: categories
+            })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            // Clear previous results if they exist
+            const existingResults = document.getElementById('search-results');
+            if (existingResults) {
+                existingResults.remove();
+            }
+
+            // Create results container
+            const resultsContainer = document.createElement('div');
+            resultsContainer.id = 'search-results';
+            resultsContainer.className = 'mt-4';
+
+            if (data.markets && data.markets.length > 0) {
+                // Create tabs container
+                const tabsContainer = document.createElement('div');
+                tabsContainer.className = 'nav nav-tabs mb-3';
+                tabsContainer.id = 'marketTabs';
+                
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                tabContent.id = 'marketTabContent';
+                
+                // Add results count message
+                const resultsCount = document.createElement('div');
+                resultsCount.className = 'text-secondary mb-3';
+                resultsCount.innerHTML = `<i class="fas fa-info-circle me-2"></i>Showing ${data.markets.length} most relevant markets`;
+                resultsContainer.appendChild(resultsCount);
+                
+                data.markets.forEach((market, index) => {
+                    // Create tab
+                    const tab = document.createElement('button');
+                    tab.className = `nav-link ${index === 0 ? 'active' : ''}`;
+                    tab.id = `market-tab-${index}`;
+                    tab.setAttribute('data-bs-toggle', 'tab');
+                    tab.setAttribute('data-bs-target', `#market-content-${index}`);
+                    tab.type = 'button';
+                    tab.textContent = `Market ${index + 1}`;
+                    tabsContainer.appendChild(tab);
+                    
+                    // Create tab content
+                    const tabPane = document.createElement('div');
+                    tabPane.className = `tab-pane fade ${index === 0 ? 'show active' : ''}`;
+                    tabPane.id = `market-content-${index}`;
+                    
+                    const marketCard = document.createElement('div');
+                    marketCard.className = 'citation-card';
+                    
+                    const tags = market.tags ? market.tags.split(',').filter(tag => tag).join(', ') : '';
+                    
+                    marketCard.innerHTML = `
+                        <div class="market-card-content">
+                            ${market.icon ? 
+                                `<img src="${market.icon}" alt="${market.question}" class="market-image">` : 
+                                `<div class="market-image placeholder">
+                                    <i class="fas fa-chart-line"></i>
+                                 </div>`
+                            }
+                            <div class="market-details">
+                                <div class="citation-source">${market.question}</div>
+                                ${tags ? `<div class="citation-date">Tags: ${tags}</div>` : ''}
+                                <a href="${market.market_url}" target="_blank" class="citation-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span>View Market</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    
+                    tabPane.appendChild(marketCard);
+                    tabContent.appendChild(tabPane);
+                });
+                
+                resultsContainer.appendChild(tabsContainer);
+                resultsContainer.appendChild(tabContent);
+                
+                // Add Ready to Bet button
+                const readyToBetBtn = document.createElement('button');
+                readyToBetBtn.className = 'btn btn-primary mt-4 w-100';
+                readyToBetBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Ready to Bet';
+                readyToBetBtn.onclick = function() {
+                    document.getElementById('intentOverlay').style.display = 'none';
+                    document.getElementById('polymarket-link').focus();
+                };
+                resultsContainer.appendChild(readyToBetBtn);
+                
+            } else {
+                resultsContainer.innerHTML = `
+                    <div class="citation-card">
+                        <div class="text-secondary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No markets found matching your criteria
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Add results to the page
+            const freeFormSection = document.querySelector('.free-form-section');
+            freeFormSection.appendChild(resultsContainer);
+        } else {
+            alert(data.error || 'Failed to find markets. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while searching for markets.');
+    } finally {
+        this.disabled = false;
+        this.innerHTML = originalText;
+    }
+});
+
+// Modify the close intent overlay handler
+document.getElementById('closeIntent').addEventListener('click', function() {
+    document.getElementById('intentOverlay').style.display = 'none';
+    // Reset selection
+    selectedCategory = '';
+    document.querySelectorAll('.category-button').forEach(button => {
+        button.classList.remove('selected');
+    });
+    document.getElementById('userIntent').value = '';
+});
+
 document.getElementById('analysis-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -500,9 +1034,30 @@ document.getElementById('analysis-form').addEventListener('submit', async functi
     const errorMessage = document.getElementById('error-message');
     const analysisResults = document.getElementById('analysis-results');
     
-    // Update button state
+    // Loading phrases
+    const loadingPhrases = [
+        'Doing research for you',
+        'Gathering wisdom from the depths of the internet',
+        'Hacking into the matrix... just kidding',
+        'Ensuring 42 is still the answer',
+        'Bribing the AI to give the best insights',
+        'Making sure the data is not lying to us',
+        'Gathering alpha',
+        'Verifying with vitalik',
+        'Summoning AI wisdom'
+    ];
+    let currentPhraseIndex = 0;
+    
+    // Function to update loading text
+    const updateLoadingText = () => {
+        submitButton.querySelector('.btn-text').textContent = loadingPhrases[currentPhraseIndex];
+        currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+    };
+    
+    // Start phrase rotation
     submitButton.classList.add('loading');
-    submitButton.querySelector('.btn-text').textContent = 'Doing Research For You';
+    const phraseInterval = setInterval(updateLoadingText, 2000);
+    updateLoadingText(); // Show first phrase immediately
     
     errorMessage.style.display = 'none';
     analysisResults.style.display = 'none';
@@ -530,7 +1085,38 @@ document.getElementById('analysis-form').addEventListener('submit', async functi
             
             document.getElementById('market-name').textContent = data.market_info.name;
             document.getElementById('prediction-text').textContent = data.prediction;
-            document.getElementById('confidence-text').textContent = `${data.confidence}% Confidence`;
+            
+            // Update confidence display
+            const confidenceValue = data.confidence;
+            document.getElementById('confidence-text').textContent = `${confidenceValue}% Confidence`;
+            
+            // Update confidence meter
+            const confidenceFill = document.querySelector('.confidence-fill');
+            const confidenceValueDisplay = document.querySelector('.confidence-value');
+            
+            // Trigger reflow to ensure animation works
+            confidenceFill.style.width = '0%';
+            void confidenceFill.offsetWidth;
+            
+            // Set the new width with animation
+            confidenceFill.style.width = `${confidenceValue}%`;
+            confidenceValueDisplay.textContent = `${confidenceValue}%`;
+            
+            // Update confidence value color based on the confidence level
+            confidenceValueDisplay.classList.remove('low', 'medium', 'high');
+            if (confidenceValue < 40) {
+                confidenceValueDisplay.classList.add('low');
+            } else if (confidenceValue < 70) {
+                confidenceValueDisplay.classList.add('medium');
+            } else {
+                confidenceValueDisplay.classList.add('high');
+            }
+            
+            // Position the value label
+            const meterWidth = document.querySelector('.confidence-bar').offsetWidth;
+            const position = (confidenceValue / 100) * meterWidth;
+            confidenceValueDisplay.style.left = `${position}px`;
+            
             document.getElementById('explanation-text').textContent = data.explanation;
             
             const citationsContainer = document.getElementById('citations-container');
@@ -594,10 +1180,50 @@ document.getElementById('analysis-form').addEventListener('submit', async functi
         document.getElementById('error-text').textContent = 'An error occurred while connecting to the server.';
         errorMessage.style.display = 'block';
     } finally {
+        // Clear the phrase rotation interval
+        clearInterval(phraseInterval);
         loadingOverlay.style.display = 'none';
         // Reset button state
         submitButton.classList.remove('loading');
         submitButton.querySelector('.btn-text').innerHTML = '<i class="fas fa-search me-2"></i>Analyze Market';
+    }
+});
+
+// Add new JavaScript for the intent overlay
+document.getElementById('helpButton').addEventListener('click', async function() {
+    // Show loading state
+    this.disabled = true;
+    const originalText = this.innerHTML;
+    this.innerHTML = '<div class="spinner"></div><span class="btn-text">Checking Markets...</span>';
+
+    try {
+        // Call the rebuild-index endpoint
+        const response = await fetch('/rebuild-index', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to load markets');
+        }
+
+        // Show success message if building new index
+        if (!data.message.includes('existing')) {
+            alert(data.message);
+        }
+
+        // Show the overlay after successful index check/rebuild
+        document.getElementById('intentOverlay').style.display = 'flex';
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to load market data. Please try again.');
+    } finally {
+        // Reset button state
+        this.disabled = false;
+        this.innerHTML = originalText;
     }
 });
 </script>
