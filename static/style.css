@@ -1,0 +1,49 @@
+/* Additional custom styles */
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.hero-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-radius: 0 0 50px 50px;
+    margin-bottom: 3rem;
+}
+
+.form-floating {
+    margin-bottom: 1rem;
+}
+
+.loading-spinner {
+    display: none;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.chart-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.prediction-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.confidence-meter {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+}
+
+.confidence-value {
+    height: 100%;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: width 0.3s ease;
+} 

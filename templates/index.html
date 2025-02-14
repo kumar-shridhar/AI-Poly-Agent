@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    :root {
+        --squid-pink: #FF2D78;
+        --squid-pink-light: #FF69B4;
+        --squid-dark: #0A0A0A;
+        --squid-gray: #2A2A2A;
+        --squid-light: #FFFFFF;
+        --text-primary: #FFFFFF;
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --border-color: rgba(255, 45, 120, 0.2);
+        --card-shadow: 0 8px 32px rgba(255, 45, 120, 0.2);
+    }
+
+    body {
+        background: var(--squid-dark);
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            linear-gradient(45deg, transparent 45%, rgba(255, 45, 120, 0.03) 45%, rgba(255, 45, 120, 0.03) 55%, transparent 55%),
+            linear-gradient(-45deg, transparent 45%, rgba(255, 45, 120, 0.03) 45%, rgba(255, 45, 120, 0.03) 55%, transparent 55%);
+        background-size: 60px 60px;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .hero-section {
+        position: relative;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '○';
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        font-size: 2rem;
+        color: var(--squid-pink);
+        opacity: 0.5;
+    }
+
+    .hero-section::after {
+        content: '△';
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        font-size: 2rem;
+        color: var(--squid-pink);
+        opacity: 0.5;
+    }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .logo-container {
+        width: 360px;
+        height: 360px;
+        position: relative;
+        filter: drop-shadow(0 0 30px rgba(255, 45, 120, 0.3));
+    }
+
+    .logo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+    }
+
+    .hero-title .highlight {
+        color: var(--squid-pink);
+        padding: 0 0.2em;
+        position: relative;
+    }
+
+    .hero-title .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--squid-pink);
+        opacity: 0.5;
+    }
+
+    .hero-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        font-weight: 500;
+        max-width: 600px;
+        letter-spacing: -0.01em;
+        line-height: 1.4;
+        margin-bottom: 2rem;
+    }
+
+    .input-card {
+        background: var(--squid-gray);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        backdrop-filter: blur(20px);
+    }
+
+    .form-control {
+        background: var(--squid-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--squid-pink);
+        box-shadow: 0 0 0 4px rgba(255, 45, 120, 0.1);
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: var(--text-secondary);
+    }
+
+    .form-label {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        background: var(--squid-pink);
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .btn-primary.loading {
+        background: var(--squid-gray);
+        pointer-events: none;
+        position: relative;
+    }
+
+    .btn-primary.loading .btn-text {
+        opacity: 0.7;
+    }
+
+    .btn-primary .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--text-primary);
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 0.8s linear infinite;
+    }
+
+    .btn-primary.loading .spinner {
+        display: inline-block;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .result-section {
+        display: none;
+        animation: fadeIn 0.5s ease-out;
+        padding: 2rem 0;
+    }
+
+    .prediction-card {
+        background: var(--squid-gray);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+    }
+
+    .market-question {
+        color: var(--text-primary);
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.4;
+        margin-bottom: 2.5rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .prediction-text {
+        font-size: 5rem;
+        font-weight: 800;
+        margin: 1.5rem 0;
+        color: var(--squid-pink);
+    }
+
+    .confidence-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .explanation-card {
+        background: var(--squid-gray);
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+    }
+
+    .explanation-text {
+        font-size: 1.125rem;
+        line-height: 1.7;
+        color: var(--text-primary);
+    }
+
+    .section-title {
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .citations-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .citation-card {
+        background: var(--squid-gray);
+        border-radius: 16px;
+        padding: 1.75rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .citation-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(255, 45, 120, 0.2);
+        border-color: var(--squid-pink);
+    }
+
+    .citation-source {
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        font-size: 1.125rem;
+    }
+
+    .citation-date {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.25rem;
+        font-weight: 500;
+    }
+
+    .citation-link {
+        color: var(--squid-pink);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .citation-link:hover {
+        color: var(--squid-pink-light);
+    }
+
+    .error-message {
+        background: rgba(255, 45, 120, 0.1);
+        border: 1px solid var(--squid-pink);
+        color: var(--squid-pink-light);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .loading-overlay {
+        background: rgba(10, 10, 10, 0.9);
+        backdrop-filter: blur(4px);
+    }
+
+    .loading-spinner {
+        border-color: var(--squid-pink);
+        border-top-color: transparent;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 991px) {
+        .hero-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 3rem;
+            padding: 0 1.5rem;
+        }
+
+        .hero-text {
+            text-align: center;
+            order: 2;
+        }
+
+        .logo-container {
+            width: 280px;
+            height: 280px;
+            order: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin: 0 auto 2rem;
+        }
+
+        .prediction-text {
+            font-size: 4rem;
+        }
+
+        .market-question {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <img src="static/images/ai-poly-agent-logo.png" alt="AI POLY AGENT Logo">
+                </div>
+                <div class="hero-text">
+                    <h1 class="hero-title">AI <span class="highlight">POLY AGENT</span></h1>
+                    <p class="hero-subtitle">Empowering Your Polymarket Decisions with AI Insight</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="input-card">
+                    <form id="analysis-form">
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-link"></i>
+                                Polymarket Link
+                            </label>
+                            <input type="url" class="form-control" id="polymarket-link" required
+                                   placeholder="Enter the Polymarket URL to analyze">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-key"></i>
+                                Perplexity API Key
+                            </label>
+                            <input type="password" class="form-control" id="api-key" required
+                                   placeholder="Enter your Perplexity API key">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <div class="spinner"></div>
+                            <span class="btn-text">
+                                <i class="fas fa-search me-2"></i>Analyze Market
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-message" class="row justify-content-center mt-4" style="display: none;">
+            <div class="col-md-8">
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="error-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="analysis-results" class="result-section">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="prediction-card">
+                        <div class="market-question" id="market-name">Loading...</div>
+                        <h2 class="prediction-text mb-3" id="prediction-text">Loading...</h2>
+                        <div class="confidence-text" id="confidence-text"></div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h5 class="section-title">Analysis</h5>
+                        <p class="explanation-text" id="explanation-text"></p>
+                    </div>
+
+                    <h5 class="section-title">Sources</h5>
+                    <div class="citations-container" id="citations-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('analysis-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitButton = this.querySelector('button[type="submit"]');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const errorMessage = document.getElementById('error-message');
+    const analysisResults = document.getElementById('analysis-results');
+    
+    // Update button state
+    submitButton.classList.add('loading');
+    submitButton.querySelector('.btn-text').textContent = 'Doing Research For You';
+    
+    errorMessage.style.display = 'none';
+    analysisResults.style.display = 'none';
+    loadingOverlay.style.display = 'flex';
+    
+    const polymarketLink = document.getElementById('polymarket-link').value;
+    const apiKey = document.getElementById('api-key').value;
+    
+    try {
+        const response = await fetch('/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                polymarket_link: polymarketLink,
+                api_key: apiKey
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            analysisResults.style.display = 'block';
+            
+            document.getElementById('market-name').textContent = data.market_info.name;
+            document.getElementById('prediction-text').textContent = data.prediction;
+            document.getElementById('confidence-text').textContent = `${data.confidence}% Confidence`;
+            document.getElementById('explanation-text').textContent = data.explanation;
+            
+            const citationsContainer = document.getElementById('citations-container');
+            citationsContainer.innerHTML = '';
+            
+            if (data.sources && data.sources.length > 0) {
+                data.sources.forEach(source => {
+                    const card = document.createElement('div');
+                    card.className = 'citation-card';
+                    
+                    const urlMatch = source.match(/https?:\/\/[^\s]+/);
+                    const dateMatch = source.match(/\((.*?)\)/);
+                    
+                    let sourceName = source;
+                    let sourceDate = '';
+                    let sourceUrl = '';
+                    
+                    if (urlMatch) {
+                        sourceUrl = urlMatch[0];
+                        sourceName = source.replace(sourceUrl, '').replace(/\s+$/, '');
+                    }
+                    
+                    if (dateMatch) {
+                        sourceDate = dateMatch[1];
+                        sourceName = sourceName.replace(`(${sourceDate})`, '').trim();
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="citation-source">${sourceName}</div>
+                        ${sourceDate ? `<div class="citation-date">${sourceDate}</div>` : ''}
+                        ${sourceUrl ? `
+                            <a href="${sourceUrl}" target="_blank" class="citation-link">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>View Source</span>
+                            </a>
+                        ` : ''}
+                    `;
+                    
+                    citationsContainer.appendChild(card);
+                });
+            } else {
+                citationsContainer.innerHTML = `
+                    <div class="citation-card">
+                        <div class="text-secondary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No sources provided for this analysis
+                        </div>
+                    </div>
+                `;
+            }
+            
+            analysisResults.scrollIntoView({
+                behavior: 'smooth'
+            });
+        } else {
+            document.getElementById('error-text').textContent = data.error || 'An error occurred while analyzing the market.';
+            errorMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('error-text').textContent = 'An error occurred while connecting to the server.';
+        errorMessage.style.display = 'block';
+    } finally {
+        loadingOverlay.style.display = 'none';
+        // Reset button state
+        submitButton.classList.remove('loading');
+        submitButton.querySelector('.btn-text').innerHTML = '<i class="fas fa-search me-2"></i>Analyze Market';
+    }
+});
+</script>
+{% endblock %} 
